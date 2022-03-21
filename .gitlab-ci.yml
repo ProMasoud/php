@@ -1,0 +1,19 @@
+.docker_login: &docker_login |
+  docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
+
+stages:
+  - build
+
+app-production:
+  image: docker:20
+  stage: build
+  services:
+    - docker:20-dind
+  before_script:
+    - *docker_login
+  script:
+    - docker build --pull -t "$CI_REGISTRY_IMAGE" -f ./Dockerfile .
+    - docker push "$CI_REGISTRY_IMAGE"
+
+
+
