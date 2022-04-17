@@ -12,8 +12,8 @@ app-production:
   before_script:
     - *docker_login
   script:
-    - docker build --pull -t "$CI_REGISTRY_IMAGE" -f ./Dockerfile .
-    - docker push "$CI_REGISTRY_IMAGE"
+    - docker build --pull -t "$CI_REGISTRY_IMAGE/7.4" -f ./Dockerfile .
+    - docker push "$CI_REGISTRY_IMAGE/7.4"
 
 
 
