@@ -5,14 +5,14 @@ stages:
   - build
 
 app-production:
-  image: docker:20
+  image: docker
   stage: build
   services:
-    - docker:20-dind
+    - docker:dind
   before_script:
     - *docker_login
   script:
-    - docker build --pull -t "$CI_REGISTRY_IMAGE" -f ./Dockerfile .
+    - docker buildx build --platform linux/amd64,linux/arm64 --pull -t "$CI_REGISTRY_IMAGE" -f ./Dockerfile .
     - docker push "$CI_REGISTRY_IMAGE"
 
 
