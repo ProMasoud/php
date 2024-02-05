@@ -11,6 +11,7 @@ app-production:
     - docker:dind
   before_script:
     - *docker_login
+    - docker buildx create --name multiarch --use
   script:
     - docker buildx build --platform linux/amd64,linux/arm64 --pull -t "$CI_REGISTRY_IMAGE" -f ./Dockerfile .
     - docker push "$CI_REGISTRY_IMAGE"
