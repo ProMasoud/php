@@ -24,7 +24,7 @@ app-production:
   before_script:
     - *docker_login
   script:
-    - docker build --pull -t "$CI_REGISTRY_IMAGE:8.2" -f ./Dockerfile .
+    - docker build --pull -t "$CI_REGISTRY_IMAGE/8.2" -f ./Dockerfile .
     - docker push "$CI_REGISTRY_IMAGE:8.2"
 
 app-production-arm:
@@ -35,7 +35,7 @@ app-production-arm:
   before_script:
     - *docker_login
   script:
-    - docker build --pull -t "$CI_REGISTRY_IMAGE:8.2-arm" -f ./Dockerfile .
+    - docker build --pull -t "$CI_REGISTRY_IMAGE/8.2-arm" -f ./Dockerfile .
     - docker push "$CI_REGISTRY_IMAGE:8.2-arm"
   tags:
     - arm
