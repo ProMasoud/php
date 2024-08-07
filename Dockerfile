@@ -1,14 +1,15 @@
+FROM composer:2.7.7 AS composer
 FROM php:8.2-fpm
 
 # Install dependencies
 RUN apt-get update && apt-get install -y --no-install-recommends \
     curl \
     zip \
+    unzip \
     mariadb-client \
     nano \
     nginx \
     supervisor
-
 
 ADD https://github.com/mlocati/docker-php-extension-installer/releases/latest/download/install-php-extensions /usr/local/bin/
 
@@ -22,10 +23,9 @@ ENV PHP_OPCACHE_VALIDATE_TIMESTAMPS="0" \
     PHP_OPCACHE_MAX_WASTED_PERCENTAGE="10" \
     PHP_CONFIG="production"
 
-
-
 # Install composer
-RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+COPY --from=composer /usr/bin/composer /usr/bin/composer
+# RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
 # Install postgres
 RUN apt-get clean ; \
