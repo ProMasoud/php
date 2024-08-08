@@ -4,17 +4,38 @@
 stages:
   - build
 
-app-production:
-  image: docker
+# app-production:
+#   image: docker
+#   stage: build
+#   services:
+#     - docker:dind
+#   before_script:
+#     - *docker_login
+#     - docker buildx create --name multiarch --use
+#   script:
+#     - docker buildx build --platform linux/amd64,linux/arm64 --pull -t "$CI_REGISTRY_IMAGE" -f ./Dockerfile .
+#     - docker push "$CI_REGISTRY_IMAGE"
+
+build:
   stage: build
+  image: docker:19.03.12  # Use Docker image for GitLab CI/CD
+
   services:
-    - docker:dind
-  before_script:
-    - *docker_login
-    - docker buildx create --name multiarch --use
+    - docker:19.03.12-dind  # Use Docker-in-Docker service
+
+  # Define matrix for PHP versions
   script:
-    - docker buildx build --platform linux/amd64,linux/arm64 --pull -t "$CI_REGISTRY_IMAGE" -f ./Dockerfile .
-    - docker push "$CI_REGISTRY_IMAGE"
+    - |
+      for PHP_VERSION in $PHP_VERSIONS; do
+        docker build -t $CI_REGISTRY_IMAGE/${PHP_VERSION} --build-arg="VERSION=${PHP_VERSION}" -f ./Dockerfile .
+        docker push $CI_REGISTRY_IMAGE/${PHP_VERSION}
+      done
+
+  variables:
+    PHP_VERSIONS: ["8.1", "8.2"]
+
+  only:
+    - main
 
 
 
