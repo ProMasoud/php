@@ -25,13 +25,10 @@ build:
 
   # Define matrix for PHP versions
   script:
-    - |
-      # for PHP_VERSION in $PHP_VERSIONS; do
-        echo "${PHP_VERSION}"
-        docker build -t $CI_REGISTRY_IMAGE/${PHP_VERSION} --build-arg="VERSION=${PHP_VERSION}" -f ./Dockerfile .
-        docker push $CI_REGISTRY_IMAGE/${PHP_VERSION}
-      # done
-  
+    - *docker_login
+    - docker pull $CI_REGISTRY_IMAGE/${PHP_VERSION}
+    - docker build --pull --cache-from -t $CI_REGISTRY_IMAGE/${PHP_VERSION} --build-arg="VERSION=${PHP_VERSION}" -f ./Dockerfile .
+    - docker push $CI_REGISTRY_IMAGE/${PHP_VERSION}  
   parallel:
     matrix:
       - PHP_VERSION: ["8.1", "8.2"]
