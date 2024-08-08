@@ -27,6 +27,7 @@ build:
   script:
     - |
       # for PHP_VERSION in $PHP_VERSIONS; do
+        echo "${PHP_VERSION}"
         docker build -t $CI_REGISTRY_IMAGE/${PHP_VERSION} --build-arg="VERSION=${PHP_VERSION}" -f ./Dockerfile .
         docker push $CI_REGISTRY_IMAGE/${PHP_VERSION}
       # done
