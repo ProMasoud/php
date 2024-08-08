@@ -4,17 +4,26 @@
 stages:
   - build
 
-app-production:
-  image: docker
+build:
   stage: build
+  image: docker
+
   services:
     - docker:dind
-  before_script:
-    - *docker_login
-    - docker buildx create --name multiarch --use
+
+  # Define matrix for PHP versions
   script:
-    - docker buildx build --platform linux/amd64,linux/arm64 --pull -t "$CI_REGISTRY_IMAGE" -f ./Dockerfile .
-    - docker push "$CI_REGISTRY_IMAGE"
+    - *docker_login
+    - docker pull $CI_REGISTRY_IMAGE/${PHP_VERSION} || true
+    - if [[ "$ARCH" == "arm" ]]; then export IMAGE_NAME=${PHP_VERSION}-arm; else export IMAGE_NAME=${PHP_VERSION}; fi
+    - docker build --pull -t $CI_REGISTRY_IMAGE/${IMAGE_NAME} --build-arg="VERSION=${PHP_VERSION}" -f ./Dockerfile .
+    - docker push $CI_REGISTRY_IMAGE/${IMAGE_NAME}
+  parallel:
+    matrix:
+      - PHP_VERSION: ["7.4", "8.0", "8.1", "8.2"]
+        ARCH: ["arm", "amd"]
 
-
-
+  tags:
+    - saas-linux-small-${ARCH}
+  only:
+    - main
