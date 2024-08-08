@@ -1,5 +1,6 @@
-FROM composer:2.7.7 AS composer
 ARG VERSION
+FROM composer:2.7.7 AS composer
+RUN echo ${VERSION}
 FROM php:${VERSION}-fpm
 
 # Install dependencies
