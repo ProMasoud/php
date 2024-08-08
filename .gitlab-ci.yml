@@ -18,10 +18,10 @@ stages:
 
 build:
   stage: build
-  image: docker:19.03.12  # Use Docker image for GitLab CI/CD
+  image: docker
 
   services:
-    - docker:19.03.12-dind  # Use Docker-in-Docker service
+    - docker:dind
 
   # Define matrix for PHP versions
   script:

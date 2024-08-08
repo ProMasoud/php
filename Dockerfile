@@ -1,6 +1,5 @@
 ARG VERSION
-FROM composer:2.7.7 AS composer
-RUN echo ${VERSION}
+# FROM composer:2.7.7 AS composer
 FROM php:${VERSION}-fpm
 
 # Install dependencies
@@ -29,7 +28,7 @@ ENV PHP_OPCACHE_VALIDATE_TIMESTAMPS="0" \
     PHP_CONFIG="production"
 
 # Install composer
-COPY --from=composer /usr/bin/composer /usr/local/bin/composer
+# COPY --from=composer /usr/bin/composer /usr/local/bin/composer
 # RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
 RUN apt-get clean ; \
