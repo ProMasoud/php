@@ -24,6 +24,6 @@ build:
         ARCH: ["arm", "amd"]
 
   tags:
-    - saas-linux-small-${ARCH}
+    - saas-linux-small-${ARCH}64
   only:
     - main
