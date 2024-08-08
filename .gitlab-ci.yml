@@ -27,7 +27,7 @@ build:
   script:
     - *docker_login
     - docker pull $CI_REGISTRY_IMAGE/${PHP_VERSION} || true
-    - docker build --pull --cache-from -t $CI_REGISTRY_IMAGE/${PHP_VERSION} --build-arg="VERSION=${PHP_VERSION}" -f ./Dockerfile .
+    - docker build --pull -t $CI_REGISTRY_IMAGE/${PHP_VERSION} --build-arg="VERSION=${PHP_VERSION}" -f ./Dockerfile .
     - docker push $CI_REGISTRY_IMAGE/${PHP_VERSION}  
   parallel:
     matrix:
