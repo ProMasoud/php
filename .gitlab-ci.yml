@@ -15,13 +15,14 @@ build:
   script:
     - *docker_login
     - docker pull $CI_REGISTRY_IMAGE:${PHP_VERSION} || true
-    - if [[ "$ARCH" == "arm" ]]; then export IMAGE_NAME=${PHP_VERSION}-arm; else export IMAGE_NAME=${PHP_VERSION}; fi
+    # - if [[ "$ARCH" == "arm" ]]; then export IMAGE_NAME=${PHP_VERSION}-arm; else export IMAGE_NAME=${PHP_VERSION}; fi
+    - export IMAGE_NAME=${PHP_VERSION};
     - docker build --pull -t $CI_REGISTRY_IMAGE:${IMAGE_NAME} --build-arg="VERSION=${PHP_VERSION}" -f ./Dockerfile .
     - docker push $CI_REGISTRY_IMAGE:${IMAGE_NAME}
   parallel:
     matrix:
       - PHP_VERSION: ["8.1", "8.2", "8.3"]
-        ARCH: ["arm", "amd"]
+        # ARCH: ["arm", "amd"]
 
   tags:
     - saas-linux-small-${ARCH}64
